@@ -32,21 +32,24 @@ const extractAddressFromIdentityToken = (identityToken: string): string | null =
     }
 };
 
+const toolset = new VercelAIToolSet({
+    apiKey: process.env.COMPOSIO_API_KEY,
+});
+
 export const sendPrompt = async (identityToken: string, request: {
     env: any,
     messages: any[],
     stream: boolean,
 }): Promise<any> => {
-    const composioApiKey = (request.env && request.env.COMPOSIO_API_KEY) ? request.env.COMPOSIO_API_KEY : (process.env.COMPOSIO_API_KEY || '');
-    console.log('composioApiKey  ', composioApiKey);
+    // const composioApiKey = (request.env && request.env.COMPOSIO_API_KEY) ? request.env.COMPOSIO_API_KEY : (process.env.COMPOSIO_API_KEY || '');
+    // console.log('composioApiKey  ', composioApiKey);
+
     // Extract address from bearer token
     const userAddress = extractAddressFromIdentityToken(identityToken);
     console.log('Extracted user address from bearer token:', userAddress);
     
     try {
-        const toolset = new VercelAIToolSet({
-            apiKey: composioApiKey,
-        });
+        
         const tools = await toolset.getTools({
             apps: ["gmail"], 
         }, userAddress);
