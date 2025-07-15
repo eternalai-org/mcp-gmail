@@ -19,7 +19,7 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-ENV DATA_BACKEND_URL=https://agent.api.eternalai.org
+ENV COMPOSIO_API_KEY=4xyic69yfd4610srw8cebg
 
 # Start the application
 CMD ["npm", "start"] 
