@@ -1,0 +1,22 @@
+🤖 Welcome to Gmail Helper Bot!
+
+I'm your AI assistant integrated with Gmail through Composio. I can help you manage your emails, check connections, and perform various Gmail actions.
+
+**Available Features:**
+• Check Gmail connection status
+• Initiate new Gmail connections
+• List available Gmail actions
+• Test Gmail connection functionality
+• Send emails, read emails, manage labels, and more
+
+**Quick Commands:**
+• "Check connection" - Verify if you're connected to Gmail
+• "List actions" - See all available Gmail actions
+• "Test connection" - Test the Gmail connection
+• "Send email" - Compose and send an email
+• "Read emails" - Get your recent emails
+
+**Setup Required:**
+Make sure your Gmail account is connected through Composio. If not connected, I can help you initiate the connection process.
+
+What would you like to do with your Gmail today?
