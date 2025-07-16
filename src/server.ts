@@ -23,13 +23,20 @@ app.post('/prompt', async (req: any, res: any) => {
             process.stdout.write('Assistant said: ');
             for await (const delta of textStream) {
                 const message = {
+                    id: 'chatcmpl-123',
                     object: 'chat.completion.chunk',
+                    created: 1721136000,
+                    model: 'gpt-4o-mini',
+                    service_tier: "default",
                     choices: [
                         {
+                            index: 0,
                             delta: {
                                 role: 'assistant',
                                 content: delta,
                             },
+                            finish_reason: null,
+                            logprobs: null,
                         },
                     ],
                 }
@@ -40,13 +47,19 @@ app.post('/prompt', async (req: any, res: any) => {
             res.end();
         } else if (typeof textStream === 'string') {
             const message = {
+                id: 'chatcmpl-123',
                 object: 'chat.completion.chunk', 
+                created: 1721136000,
+                model: 'gpt-4o-mini',
+                service_tier: "default",
                 choices: [
                     {
                         delta: {
                             role: 'assistant',
                             content: textStream,
                         },
+                        finish_reason: null,
+                        logprobs: null,
                     },
                 ],
             }
