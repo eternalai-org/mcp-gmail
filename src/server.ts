@@ -28,6 +28,7 @@ app.post('/prompt', async (req: any, res: any) => {
                             delta: {
                                 role: 'assistant',
                                 content: delta,
+                                object: 'chat.completion.chunk',
                             },
                         },
                     ],
