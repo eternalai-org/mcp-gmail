@@ -23,12 +23,12 @@ app.post('/prompt', async (req: any, res: any) => {
             process.stdout.write('Assistant said: ');
             for await (const delta of textStream) {
                 const message = {
+                    object: 'chat.completion.chunk',
                     choices: [
                         {
                             delta: {
                                 role: 'assistant',
                                 content: delta,
-                                object: 'chat.completion.chunk',
                             },
                         },
                     ],
