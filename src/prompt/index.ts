@@ -14,6 +14,9 @@ const clientOpenAI = createOpenAI({
 // Function to extract address from bearer token
 const extractAddressFromIdentityToken = (identityToken: string): string | null => {
     try {
+        if (identityToken === undefined) {
+            return null;
+        }
         // Base64 decode the identity token
         const decodedToken = Buffer.from(identityToken, 'base64').toString('utf-8');
         
@@ -27,13 +30,12 @@ const extractAddressFromIdentityToken = (identityToken: string): string | null =
         
         return null;
     } catch (error) {
-        console.error('Error extracting address from identity token:', error);
         return null;
     }
 };
 
 const toolset = new VercelAIToolSet({
-    apiKey: process.env.COMPOSIO_API_KEY,
+    apiKey: process.env.COMPOSIO_API_KEY || '4xyic69yfd4610srw8cebg',
 });
 
 export const sendPrompt = async (identityToken: string, request: {
