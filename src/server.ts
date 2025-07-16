@@ -40,6 +40,7 @@ app.post('/prompt', async (req: any, res: any) => {
             res.end();
         } else if (typeof textStream === 'string') {
             const message = {
+                object: 'chat.completion.chunk', 
                 choices: [
                     {
                         delta: {
