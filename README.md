@@ -1,250 +1,108 @@
-# Gmail Helper Bot with Composio
+# Gmail AI Agent MCP Server
 
-A Node.js application that provides an AI assistant integrated with Gmail using the Composio platform for seamless email management.
+A Model Context Protocol (MCP) server that provides Gmail integration capabilities for AI models and tools. This server enables AI assistants to connect to Gmail accounts, check connection status, and send emails through a secure interface.
 
-## Features
+## Tools
 
-- **Gmail Integration via Composio**: Seamless integration with Gmail through Composio's platform
-- **AI-Powered Email Management**: Intelligent email composition, reading, and management
-- **Connection Management**: Check, test, and initiate Gmail connections
-- **Action Discovery**: List and explore available Gmail actions
-- **Error Handling**: Comprehensive error handling and user feedback
+The server implements the following Gmail-related tools:
+
+### `connect-gmail`
+Initiates a connection to a Gmail account. This tool will provide a redirect URL for OAuth authentication.
+
+### `check-gmail-connection`
+Checks the current Gmail connection status and displays user profile information including email address, total messages, and total threads.
+
+### `send-email`
+Sends an email through the connected Gmail account. Parameters:
+- `to`: The email address of the recipient
+- `subject`: The subject of the email
+- `body`: The body content of the email
 
 ## Setup
 
-### 1. Environment Configuration
+### Prerequisites
 
-Create a `.env` file with the following variables:
+1. **Composio API Key**: You'll need a Composio API key to use the Gmail integration. You can get one by signing up at [Composio](https://composio.dev/).
 
-```env
-# Composio Configuration
-COMPOSIO_API_KEY=your_composio_api_key_here
-YOUR_GMAIL=your_email@gmail.com
+2. **Gmail Account**: A Gmail account that you want to connect to the AI agent.
 
-# LLM Configuration
-LLM_BASE_URL=https://vibe-agent-gateway.eternalai.org/v1
-LLM_API_KEY=your_llm_api_key
-LLM_MODEL_ID=gpt-4o-mini
+### Installation
 
-# Server Configuration
-PORT=3000
-DATA_BACKEND_URL=http://localhost:8480
+You can configure the Gmail AI agent server in your MCP client. Here is an example configuration for Claude Desktop (Settings -> Developer -> Edit Config):
+
+```json
+{
+  "mcpServers": {
+    "gmail-agent": {
+      "command": "node",
+      "args": ["path/to/your/gmail-mcp/dist/index.js"],
+      "env": {
+        "COMPOSIO_API_KEY": "<YOUR_COMPOSIO_API_KEY>"
+      }
+    }
+  }
+}
 ```
 
-### 2. Getting Your Composio API Key
+### Development Setup
 
-1. Sign up for a Composio account at [composio.dev](https://composio.dev)
-2. Navigate to your dashboard
-3. Generate an API key
-4. Add the API key to your `.env` file
-
-### 3. Gmail Connection Setup
-
-The bot will automatically handle Gmail connection setup. When you first use Gmail actions, it will:
-1. Check if you're connected to Gmail
-2. If not connected, provide a connection link
-3. Guide you through the OAuth process
-4. Store your connection for future use
-
-## Usage
-
-### Starting the Server
+If you're running from source:
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd gmail-mcp
+
 # Install dependencies
 npm install
 
 # Build the project
 npm run build
 
-# Start the server
+# Run the server
 npm start
-
-# Or run in development mode
-npm run dev
 ```
 
-### Interactive Chat
+Then configure your MCP client to point to the built server:
 
-```bash
-# Start an interactive chat session
-npm run chat
-```
-
-## API Endpoints
-
-### POST /prompt
-
-Send a prompt to the AI assistant and get a response.
-
-**Headers:**
-```
-Authorization: Bearer your_token_here
-Content-Type: application/json
-```
-
-**Body:**
 ```json
 {
-  "messages": [
-    {
-      "role": "user",
-      "content": "Check my Gmail connection"
+  "mcpServers": {
+    "gmail-agent": {
+      "command": "node",
+      "args": ["/path/to/gmail-mcp/dist/index.js"],
+      "env": {
+        "COMPOSIO_API_KEY": "<YOUR_COMPOSIO_API_KEY>"
+      }
     }
-  ],
-  "stream": false
+  }
 }
 ```
 
-## Available Tools
+## Usage
 
-The AI assistant has access to the following tools:
-
-### checkUserConnection
-Check if the user is connected to Gmail and get connection status.
-
-### getConnectionStatus
-Get detailed connection status and information for all connected apps.
-
-### initiateGmailConnection
-Initiate a new Gmail connection for the user.
-
-### listAvailableActions
-List all available Gmail actions that can be performed.
-
-### testGmailConnection
-Test the Gmail connection by performing a simple action.
-
-### Gmail Actions (via Composio)
-- Send emails
-- Read emails
-- Manage labels
-- Create drafts
-- Search emails
-- And many more...
-
-## Connection Management
-
-### Automatic Connection Setup
-The bot automatically handles Gmail connection setup:
-1. **Connection Check**: Verifies if you're connected to Gmail
-2. **Connection Initiation**: Provides OAuth link if not connected
-3. **Connection Testing**: Tests the connection with a simple action
-4. **Status Monitoring**: Monitors connection health
-
-### Manual Connection Management
-You can also manually manage connections:
-- Use `checkUserConnection` to verify connection status
-- Use `initiateGmailConnection` to start a new connection
-- Use `getConnectionStatus` to see all connected apps
-
-## Gmail Actions
-
-The bot supports a wide range of Gmail actions through Composio:
-
-### Email Management
-- **Send Email**: Compose and send emails
-- **Read Emails**: Get recent emails with filtering
-- **Search Emails**: Search through your email history
-- **Create Draft**: Create email drafts
-- **Send Draft**: Send existing drafts
-
-### Label Management
-- **List Labels**: Get all Gmail labels
-- **Create Label**: Create new labels
-- **Modify Labels**: Update label properties
-
-### Advanced Features
-- **Email Threading**: Work with email threads
-- **Attachment Handling**: Manage email attachments
-- **Email Filtering**: Filter emails by various criteria
-
-## Error Handling
-
-The bot includes comprehensive error handling for:
-- Missing Composio API key
-- Gmail connection issues
-- OAuth authentication failures
-- Network connectivity issues
-- Gmail API errors
-- Permission issues
-
-## Development
-
-### Project Structure
-
-```
-src/
-├── prompt/
-│   └── index.ts          # Main prompt handling logic with Composio integration
-├── server.ts             # Express server setup
-├── chat.ts               # Interactive chat interface
-├── types/
-│   └── chat.ts           # TypeScript type definitions
-└── utils/
-    └── logger.ts         # Logging utility
-```
-
-### Building
-
-```bash
-npm run build
-```
-
-### Linting
-
-```bash
-npm run lint
-```
-
-### Formatting
-
-```bash
-npm run format
-```
-
-## Docker
-
-Build and run with Docker:
-
-```bash
-# Build the image
-npm run build-docker
-
-# Run the container
-docker run -p 3000:80 --env-file .env gmail-helper
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Gmail not connected**: Use `initiateGmailConnection` to start the connection process
-2. **API key error**: Verify your Composio API key is correct
-3. **OAuth issues**: Check if the OAuth redirect URL is properly configured
-4. **Permission errors**: Ensure the Gmail app has the necessary permissions
-
-### Testing Connections
-
-Use the built-in tools to test your setup:
-
-```bash
-# Start interactive chat
-npm run chat
-
-# Then try these commands:
-# - "Check my Gmail connection"
-# - "List available Gmail actions"
-# - "Test the Gmail connection"
-```
+1. **Configure the server** in your MCP client (like Claude Desktop)
+2. **Restart your client** to load the new configuration
+3. **Connect to Gmail** by using the `connect-gmail` tool - this will provide an OAuth link
+4. **Authorize the connection** by clicking the provided link and following the Gmail authorization flow
+5. **Check connection** using `check-gmail-connection` to verify everything is working
+6. **Send emails** using the `send-email` tool with recipient, subject, and body parameters
 
 ## Security
 
-- **API Key Protection**: Never commit API keys to version control
-- **OAuth Security**: Uses secure OAuth 2.0 flow for Gmail access
-- **Data Privacy**: Respects user privacy and email content
-- **Connection Security**: Secure connection management through Composio
+- The server uses OAuth 2.0 for secure Gmail authentication
+- No passwords are stored locally
+- All Gmail operations are performed through secure API calls
+- The connection is maintained securely through Composio's infrastructure
 
-## License
+## Example Workflow
 
-This project is part of the Vibe Examples collection. 
+1. **Initial Setup**: Use `connect-gmail` to start the OAuth flow
+2. **Verification**: Use `check-gmail-connection` to confirm successful connection
+3. **Email Operations**: Use `send-email` to compose and send emails through your connected Gmail account
+
+## Troubleshooting
+
+- **Connection Issues**: If you encounter connection problems, try using `connect-gmail` again to re-authenticate
+- **API Key Issues**: Ensure your Composio API key is correctly set in the environment variables
+- **Permission Errors**: Make sure you've granted the necessary permissions during the OAuth flow
